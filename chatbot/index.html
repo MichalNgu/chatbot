@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Chatbot</title>
+</head>
+
+<body>
+
+    <main class="container">
+        <section class="chat-card">
+            <div class="header">
+                <h1>Chatbot</h1>
+                <p>Zeptejte se nás na cokoliv.</p>
+            </div>
+            <form id="chat-form">
+                <div class="form-group">
+                    <label for="question">Dotaz:</label>
+                    <textarea
+                        id="question"
+                        name="question"
+                        placeholder="Napište sem svůj dotaz..."
+                        required
+                    ></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="email">
+                        Email <span>(nepovinné)</span>
+                    </label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="vas@email.cz"
+                    >
+                </div>
+                <button type="submit">
+                    Odeslat dotaz
+                </button>
+            </form>
+            <div class="answer">
+                <h2>Odpověď podpory</h2>
+                
+                <div class="answer-box">
+                    <p id="answer-text">
+                        Odpověď se zobrazí zde...
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
