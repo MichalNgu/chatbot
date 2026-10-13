@@ -1,6 +1,6 @@
 "use strict";
 
-const USE_BACKEND = false;
+const USE_BACKEND = true;
 const BACKEND_URL = "/api/chat";
 
 const form = document.getElementById("chat-form");
@@ -78,17 +78,19 @@ form.addEventListener("submit", async (event) => {
             body: JSON.stringify(payload)
         });
 
-        if (!response.ok) {
-            throw new Error(`Server vrátil chybu (${response.status}).`);
-        }
-
         const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+            data.error || `Server vrátil chybu (${response.status}).`
+        );
+    }
 
         if (typeof data.reply !== "string" || !data.reply.trim()) {
             throw new Error("Server nevrátil platnou odpověď.");
         }
 
-        answerText.textContent = data.reply;
+     answerText.textContent = data.reply;
 
     } catch (error) {
         console.error(error);
