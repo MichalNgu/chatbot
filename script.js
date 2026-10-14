@@ -1,7 +1,7 @@
 "use strict";
 
 const USE_BACKEND = true;
-const BACKEND_URL = "/api/chat";
+const BACKEND_URL = "https://chatbot-second.onrender.com/";
 
 const form = document.getElementById("chat-form");
 const questionInput = document.getElementById("question");
