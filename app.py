@@ -86,28 +86,34 @@ def chat():
     # Zatím pouze demonstrační odpověď.
     if email:
         reply = (
-            f"Děkujeme za váš dotaz: „{question}“ "
-            f"Vaše kontaktní adresa je {email}. "
-            "Váš požadavek byl přijat podporou."
+            "DEMO ODPOVĚĎ – Backend funguje!\n\n"
+            f"Váš dotaz: {question}\n"
+            f"Váš e-mail: {email}\n\n"
+            "Stav: Požadavek byl úspěšně přijat."
         )
     else:
         reply = (
-            f"Děkujeme za váš dotaz: „{question}“ "
-            "Váš požadavek byl přijat podporou."
+            "DEMO ODPOVĚĎ – Backend funguje!\n\n"
+            f"Váš dotaz: {question}\n"
+            "Váš e-mail: Nebyl zadán.\n\n"
+            "Stav: Požadavek byl úspěšně přijat."
         )
 
     app.logger.info("Byl přijat nový dotaz.")
 
     return jsonify({
-        "reply": reply
+        "reply": reply,
+        "question": question,
+        "email": email,
+        "success": True
     }), 200
-
 
 @app.errorhandler(413)
 def request_too_large(error):
     return jsonify({
         "error": "Požadavek je příliš velký."
     }), 413
+
 
 
 if __name__ == "__main__":
