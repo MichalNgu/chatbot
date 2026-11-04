@@ -1,6 +1,6 @@
+
 "use strict";
 
-const USE_BACKEND = true;
 const BACKEND_URL = "https://chatbot-second.onrender.com/api/chat";
 
 const form = document.getElementById("chat-form");
@@ -32,8 +32,11 @@ form.addEventListener("submit", async (event) => {
         return;
     }
 
-    if (email.length > MAX_EMAIL_LENGTH || (email && !isValidEmail(email))) {
-        showMessage("Zadejte platný email.");
+    if (
+        email.length > MAX_EMAIL_LENGTH ||
+        (email && !isValidEmail(email))
+    ) {
+        showMessage("Zadejte platný e-mail.");
         emailInput.focus();
         return;
     }
@@ -49,32 +52,17 @@ form.addEventListener("submit", async (event) => {
     questionInput.disabled = true;
     emailInput.disabled = true;
 
-    showMessage("Zpracovávám dotaz…");
+    showMessage("AI připravuje odpověď…");
 
     try {
-        if (!USE_BACKEND) {
-            await new Promise(resolve => setTimeout(resolve, 500));
-
-            answerText.innerHTML = `
-                <strong>Uživatel:</strong>
-                ${escapeHtml(email || "Neuvedený email")}
-                <br><br>
-                <strong>Dotaz:</strong>
-                ${escapeHtml(question)}
-                <br><br>
-            `;
-
-            console.log(payload);
-            return;
-        }
-
         const response = await fetch(BACKEND_URL, {
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            credentials: "same-origin",
+
             body: JSON.stringify(payload)
         });
 
@@ -82,20 +70,35 @@ form.addEventListener("submit", async (event) => {
 
         if (!response.ok) {
             throw new Error(
-            data.error || `Server vrátil chybu (${response.status}).`
-        );
-    }
-
-        if (typeof data.reply !== "string" || !data.reply.trim()) {
-            throw new Error("Server nevrátil platnou odpověď.");
+                data.error ||
+                `Server vrátil chybu (${response.status}).`
+            );
         }
 
-     answerText.textContent = data.reply;
+        if (
+            data.success !== true ||
+            typeof data.reply !== "string" ||
+            !data.reply.trim()
+        ) {
+            throw new Error(
+                "Server nevrátil platnou odpověď."
+            );
+        }
+
+        // Zobrazení skutečné odpovědi AI
+        answerText.textContent = data.reply;
 
     } catch (error) {
-        console.error(error);
-        showMessage(error.message || "Nepodařilo se zpracovat dotaz.");
+
+        console.error("Chatbot error:", error);
+
+        showMessage(
+            error.message ||
+            "Nepodařilo se spojit s AI."
+        );
+
     } finally {
+
         submitButton.disabled = false;
         questionInput.disabled = false;
         emailInput.disabled = false;
@@ -105,15 +108,11 @@ form.addEventListener("submit", async (event) => {
     }
 });
 
+
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function escapeHtml(value) {
-    const div = document.createElement("div");
-    div.textContent = String(value);
-    return div.innerHTML;
-}
 
 function showMessage(message) {
     answerText.textContent = message;
